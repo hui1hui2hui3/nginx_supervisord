@@ -1,0 +1,34 @@
+version: '2'
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: "mysql"
+        volumes:
+            - /d/dockerspace/mysql:/VAR/LIB/MYSQL
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=my-secret-pw
+        networks:
+            - myserver
+     
+    supervisor:
+        build: ./supervisor
+        container_name: "supervisor"
+        volumes:
+            - /d/dockerspace/nginx+supervisrd+openssh/web/www:/srv/awesome/www
+        expose:
+            - 9000
+        networks:
+            - myserver
+            
+    nginx:
+        build: ./web
+        container_name: "nginx"
+        ports:
+            - 8001:8001
+        networks:
+            - myserver 
+networks:
+    myserver:
+      
